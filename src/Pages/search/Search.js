@@ -3,7 +3,7 @@ import "./Search.css"
 import {useLocation} from 'react-router-dom'
 import { useFetch } from '../../hooks/useFetch'
 //Components
-import RecipeList from '../../Components/RecipeList'
+import RecipeList from '../../Components/RecipeList.js'
 
 export default function Search() {
    const queryString=useLocation().search
@@ -12,14 +12,14 @@ export default function Search() {
    //?q=searched
 
    const url=`http://localhost:3000/recipes?q=${query}`
-   const {error,isPending,data}=useFetch(url) 
+   const {data:r,error,isPending}=useFetch(url) 
 
   return (
     <div>
        <h2 className="page-title">Recipes Include "{query}"</h2>
        {error && <p className='error'> {error} </p> }
        {isPending && <p className="loading">Loading...</p> }
-       {data && <RecipeList recipes={data}/>}
-    </div>
+       {r && <RecipeList recipes={r}/>}
+    </div>  
   )
 }

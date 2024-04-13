@@ -12,7 +12,7 @@ export default function Create() {
   const ingredientsInput = useRef(null);
   const history =useHistory()
   
-  const {postData,data,error}=useFetch("http://localhost:3000/recipes", "POST") 
+  const {postData,data}=useFetch("http://localhost:3000/recipes", "POST") 
 
 
   const handleSubmit = (e) => {
@@ -39,7 +39,7 @@ export default function Create() {
        if(data){
           history.push('/')
        }
-   },[data])
+   },[data,history])
 
   return (
     <div className="create">
