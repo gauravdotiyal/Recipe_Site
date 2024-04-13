@@ -2,7 +2,7 @@ import {Link} from "react-router-dom"
 
 import React from 'react'
 import "./Navbar.css"
-
+import Searchbar from "./Searchbar"
 export default function Navbar() {
   return (
     <div className='navbar'>
@@ -10,17 +10,14 @@ export default function Navbar() {
          <Link exact to="/" className="brand">
              <h1>Cooking Ninja</h1>
          </Link>
- 
+          
+            <Searchbar/>
+           
          <Link   to="/create">
             Create Recipes 
          </Link>
 
-         {/* <Link   to="/search">
-            Search Recipes 
-         </Link>
-         <Link   to="/recipe/:id">
-           Recipes 
-         </Link> */}
+         
          </nav>
     </div>
   )
