@@ -20,10 +20,8 @@ export default function Home() {
     setIsPending(true);
 
     //fetching data from firebase
-    projectFirestore
-      .collection("recipes")
-      .get()
-      .then((snapshot) => {
+    const unsub = projectFirestore
+      .collection("recipes").onSnapshot((snapshot) => {
         if (snapshot.empty) {
           setError("No recipe to load");
           setIsPending(false);
@@ -35,11 +33,13 @@ export default function Home() {
           setData(results);
           setIsPending(false);
         }
-      })
-      .catch((err) => {
-        setError(err.message);
-        setIsPending(false);
-      });
+      },(err)=>{
+        setError(err.message )
+        setIsPending(false)
+      }) 
+
+      return ()=> unsub()
+
   }, []);
 
   return (
