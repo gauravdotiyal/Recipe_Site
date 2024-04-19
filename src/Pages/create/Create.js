@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./Create.css"; 
-import { useFetch } from "../../hooks/useFetch";
-import {useHistory} from "react-router-dom"
+import "./Create.css";
+// import { useFetch } from "../../hooks/useFetch";
+
+import { useHistory } from "react-router-dom";
+import { projectFirestore } from "../../firebase/config";
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -10,16 +12,24 @@ export default function Create() {
   const [newIngredient, setNewIngredient] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const ingredientsInput = useRef(null);
-  const history =useHistory()
-  
-  const {postData,data}=useFetch("http://localhost:3000/recipes", "POST") 
+  const history = useHistory();
 
+  // const {postData,data}=useFetch("http://localhost:3000/recipes", "POST")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    postData({title,ingredients,method,cookingTime:cookingTime+' minutes'})
-    // console.log(title, method, cookingTime, ingredients);
-    
+    const doc = {
+      title,
+      ingredients,
+      method,
+      cookingTime: cookingTime + " minutes",
+    };
+    try {
+      await projectFirestore.collection("recipes").add(doc);
+      history.push("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleAdd = (e) => {
@@ -33,13 +43,13 @@ export default function Create() {
     setNewIngredient("");
     ingredientsInput.current.focus();
   };
-  
-   //redirect the user when we get the response 
-   useEffect(()=>{
-       if(data){
-          history.push('/')
-       }
-   },[data,history])
+
+  //redirect the user when we get the response
+  //  useEffect(()=>{
+  //      if(data){
+  //         history.push('/')
+  //      }
+  //  },[data,history])
 
   return (
     <div className="create">
@@ -79,7 +89,6 @@ export default function Create() {
           ))}{" "}
         </p>
 
-
         {/* second label  */}
         <label>
           <span>Recipe Method:</span>
@@ -101,7 +110,6 @@ export default function Create() {
         </label>
 
         <button className="btn">Submit</button>
-        
       </form>
     </div>
   );
